@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>vm-external-player</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <!-- Default theme. -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@vime/core@^5/themes/default.css"
+    />
+
+    <!-- Optional light theme (extends default). -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@vime/core@^5/themes/light.css"> -->
+
+    <!-- The library is lazy loaded so you have nothing to worry about, only what you use will be loaded. -->
+    <script
+      defer
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@vime/core@^5/dist/vime/vime.esm.js"
+    ></script>
+  </head>
+
+  <body>
+    <div id="container">
+      <vm-player playsinline>
+        <vm-video>
+          <source
+            id="player-src"
+            data-src=""
+            type="video/mp4"
+          />
+        </vm-video>
+
+        <vm-default-ui></vm-default-ui>
+      </vm-player>
+    </div>
+
+    <script>
+      window.player = document.querySelector("vm-player");
+    </script>
+
+    <style>
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #container {
+        width: 100%;
+      }
+    </style>
+  </body>
+  <script>
+    let init = () => {
+      try {
+        let url = window.location.href;
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        // play HLS or regular mp4 based on params type
+        if (url.includes("?source")) {
+          // extract m3u8 ulr
+          const src = urlParams.get(`source`);
+          // set player src
+          document.getElementById("player-src").setAttribute("data-src", src);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    setTimeout(() => {
+      init();
+    }, 5);
+  </script>
+</html>
